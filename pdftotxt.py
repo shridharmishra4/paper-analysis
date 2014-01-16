@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-#  predictor.py
+#  pdftotxt.py
 #  
 #  Copyright 2014 Shridhar Mishra <shridhar@shridhar>
 #  
@@ -21,27 +21,19 @@
 #  MA 02110-1301, USA.
 #  
 #  
-
-
-
-import pdfminer
-import pdf2txt
-import Tkinter
-import tkFileDialog
 from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
 from pdfminer.converter import TextConverter
 from pdfminer.layout import LAParams
 from pdfminer.pdfpage import PDFPage
 from cStringIO import StringIO
-#filename=""
 
-def convert_pdf_to_txt(filename):
+def convert_pdf_to_txt(path):
     rsrcmgr = PDFResourceManager()
     retstr = StringIO()
     codec = 'utf-8'
     laparams = LAParams()
     device = TextConverter(rsrcmgr, retstr, codec=codec, laparams=laparams)
-    fp = file(filename, 'r+')
+    fp = file(path, 'rb')
     interpreter = PDFPageInterpreter(rsrcmgr, device)
     password = ""
     maxpages = 0
@@ -56,54 +48,8 @@ def convert_pdf_to_txt(filename):
     print str
     
     
-    
-
-
-def Commondialog():
-                root = Tkinter.Tk()
-                root.withdraw()
-                
-                raw_input("Press enter to select the file")
-                
-                filename=tkFileDialog.askopenfilename()
-                #(parent=root,
-								  #initialdir="/home/shridhar/Desktop",
-								  #title='Please select a directory')
-                print filename
-                ##extension=raw_input("Enter the file extension:")
-                ##length=len(extension)
-                #os.chdir(dirname)
-                return filename
-                
-                
-                
-                
-                
-                
-def Black_list(word):#string has to be passed
-	black_list=['the','a','an','another','no','some','any','my','our',
-			  'their','her','his','its','each','every','certain','it',
-			  'this','that','that', 'which','who', 'whom', 'whose',
-			  'whichever', 'whoever', 'whomever','anybody', 'anyone', 
-			  'anything', 'each', 'either', 'everybody', 'everyone',
-			  'everything', 'neither', 'nobody', 'no one', 'nothing', 
-			  'one', 'somebody', 'someone', 'something','both', 'few', 
-			  'many','several','all', 'most', 'none', 'some','what']
-	black_list.sort()
-	if str(word) in black_list:
-		return True
-	else:
-	    return False
-				  
-			
-##print Black_list()	
-
-
-	
-
 def main():
-	f=Commondialog()
-	convert_pdf_to_txt(f)
+	convert_pdf_to_txt("simple1.pdf")
 	
 	return 0
 
