@@ -108,7 +108,7 @@ def delete_words(text):
 def main():
 	f=Commondialog()
 	text=nltk.word_tokenize(convert_pdf_to_txt(f))
-	print text
+	#print text
 	delete_words(text)
 	print text
 	
