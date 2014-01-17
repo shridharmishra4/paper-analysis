@@ -33,7 +33,9 @@ from pdfminer.converter import TextConverter
 from pdfminer.layout import LAParams
 from pdfminer.pdfpage import PDFPage
 from cStringIO import StringIO
+import nltk
 #filename=""
+text=""
 
 def convert_pdf_to_txt(filename):
     rsrcmgr = PDFResourceManager()
@@ -53,7 +55,7 @@ def convert_pdf_to_txt(filename):
     device.close()
     str = retstr.getvalue()
     retstr.close()
-    print str
+    return str
     
     
     
@@ -81,29 +83,35 @@ def Commondialog():
                 
                 
 def Black_list(word):#string has to be passed
-	black_list=['the','a','an','another','no','some','any','my','our',
-			  'their','her','his','its','each','every','certain','it',
-			  'this','that','that', 'which','who', 'whom', 'whose',
-			  'whichever', 'whoever', 'whomever','anybody', 'anyone', 
-			  'anything', 'each', 'either', 'everybody', 'everyone',
-			  'everything', 'neither', 'nobody', 'no one', 'nothing', 
-			  'one', 'somebody', 'someone', 'something','both', 'few', 
-			  'many','several','all', 'most', 'none', 'some','what']
+	black_list=['the','a','an','another','no','some','any','my','our','their','her','his','its','each','every','certain','it','this','that','that', 'which','who', 'whom', 'whose','whichever', 'whoever', 'whomever','anybody', 'anyone', 'anything', 'each', 'either', 'everybody', 'everyone','everything', 'neither', 'nobody', 'no one', 'nothing','one', 'somebody', 'someone', 'something','both', 'few', 'many','several','all', 'most', 'none', 'some','what','Hello']
 	black_list.sort()
-	if str(word) in black_list:
-		return True
+	if word in black_list:
+		#print '1'
+		return True	
 	else:
 	    return False
 				  
 			
 ##print Black_list()	
 
-
+def delete_words(text):
+	count=0
+	for tokens in text:
+		if Black_list(tokens):
+			print count
+			text.pop(count)
+		count+=1
+		
+	
 	
 
 def main():
 	f=Commondialog()
-	convert_pdf_to_txt(f)
+	text=nltk.word_tokenize(convert_pdf_to_txt(f))
+	print text
+	delete_words(text)
+	print text
+	
 	
 	return 0
 
