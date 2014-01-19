@@ -34,6 +34,14 @@ from pdfminer.layout import LAParams
 from pdfminer.pdfpage import PDFPage
 from cStringIO import StringIO
 import nltk
+import re
+
+
+
+pattern=re.compile(r"^/")
+
+
+
 #filename=""
 text=""
 
@@ -97,12 +105,16 @@ def Black_list(word):#string has to be passed
 def delete_words(text):
 	count=0
 	for tokens in text:
+		
 		if Black_list(tokens):
-			print count
+			#print count
 			text.pop(count)
 		count+=1
 		
-	
+def frequency(text):
+	freq=nltk.FreqDist(text)
+	keys=freq.keys()
+	print keys[:20]
 	
 
 def main():
@@ -110,7 +122,8 @@ def main():
 	text=nltk.word_tokenize(convert_pdf_to_txt(f))
 	#print text
 	delete_words(text)
-	print text
+	#print text
+	frequency(text)
 	
 	
 	return 0
