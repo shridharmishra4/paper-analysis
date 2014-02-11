@@ -43,8 +43,8 @@ pattern=re.compile(r"^/")
 
 
 #filename=""
-text=""
-
+text=[]
+activelist=[]
 def convert_pdf_to_txt(filename):
     rsrcmgr = PDFResourceManager()
     retstr = StringIO()
@@ -91,9 +91,13 @@ def Commondialog():
                 
                 
 def Black_list(word):#string has to be passed
-	black_list=['the','a','an','another','no','some','any','my','our','their','her','his','its','each','every','certain','it','this','that','that', 'which','who', 'whom', 'whose','whichever', 'whoever', 'whomever','anybody', 'anyone', 'anything', 'each', 'either', 'everybody', 'everyone','everything', 'neither', 'nobody', 'no one', 'nothing','one', 'somebody', 'someone', 'something','both', 'few', 'many','several','all', 'most', 'none', 'some','what','Hello']
+	black_list=['distribution','frequency','For','.',',','is','>','>>>','(',')','<','of','in','we','for','the','a','an','another','no','some','any','my','our','their','her','his','its','each','every','certain','it','this','that','that', 'which','who', 'whom', 'whose','whichever', 'whoever', 'whomever','anybody', 'anyone', 'anything', 'each', 'either', 'everybody', 'everyone','everything', 'neither', 'nobody', 'no one', 'nothing','one', 'somebody', 'someone', 'something','both', 'few', 'many','several','all', 'most', 'none', 'some','what','Hello']
 	black_list.sort()
-	if word in black_list:
+	
+	#if word==text[20]:
+		#print '1'
+		#return True
+	if word in black_list  :
 		#print '1'
 		return True	
 	else:
@@ -104,26 +108,32 @@ def Black_list(word):#string has to be passed
 
 def delete_words(text):
 	count=0
-	for tokens in text:
+	
+	for items in text:
 		
-		if Black_list(tokens):
-			#print count
-			text.pop(count)
-		count+=1
+		if not Black_list(items):
+			#print items
+			activelist.append(items)
+			count+=1
+			
+			
+		
+			
+		#count+=1
 		
 def frequency(text):
 	freq=nltk.FreqDist(text)
 	keys=freq.keys()
-	print keys[:20]
+	print keys[:50]
 	
 
 def main():
 	f=Commondialog()
-	text=nltk.word_tokenize(convert_pdf_to_txt(f))
-	#print text
+	text=nltk.word_tokenize(convert_pdf_to_txt(f).lower())
 	delete_words(text)
+	#print activelist
 	#print text
-	frequency(text)
+	frequency(activelist)
 	
 	
 	return 0
