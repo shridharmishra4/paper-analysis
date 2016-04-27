@@ -24,27 +24,24 @@
 
 
 
-import pdfminer
-import pdf2txt
 import Tkinter
+import re
 import tkFileDialog
-from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
+from cStringIO import StringIO
+
+import nltk
 from pdfminer.converter import TextConverter
 from pdfminer.layout import LAParams
+from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
 from pdfminer.pdfpage import PDFPage
-from cStringIO import StringIO
-import nltk
-import re
+
+pattern = re.compile(r"^/")
+
+# filename=""
+text = []
+activelist = []
 
 
-
-pattern=re.compile(r"^/")
-
-
-
-#filename=""
-text=[]
-activelist=[]
 def convert_pdf_to_txt(filename):
     rsrcmgr = PDFResourceManager()
     retstr = StringIO()
@@ -56,88 +53,67 @@ def convert_pdf_to_txt(filename):
     password = ""
     maxpages = 0
     caching = True
-    pagenos=set()
-    for page in PDFPage.get_pages(fp, pagenos, maxpages=maxpages, password=password,caching=caching, check_extractable=True):
+    pagenos = set()
+    for page in PDFPage.get_pages(fp, pagenos, maxpages=maxpages, password=password, caching=caching,
+                                  check_extractable=True):
         interpreter.process_page(page)
     fp.close()
     device.close()
     str = retstr.getvalue()
     retstr.close()
     return str
-    
-    
-    
 
 
 def Commondialog():
-                root = Tkinter.Tk()
-                root.withdraw()
-                
-                raw_input("Press enter to select the file")
-                
-                filename=tkFileDialog.askopenfilename()
-                #(parent=root,
-								  #initialdir="/home/shridhar/Desktop",
-								  #title='Please select a directory')
-                print filename
-                ##extension=raw_input("Enter the file extension:")
-                ##length=len(extension)
-                #os.chdir(dirname)
-                return filename
-                
-                
-                
-                
-                
-                
-def Black_list(word):#string has to be passed
-	black_list=['distribution','frequency','For','.',',','is','>','>>>','(',')','<','of','in','we','for','the','a','an','another','no','some','any','my','our','their','her','his','its','each','every','certain','it','this','that','that', 'which','who', 'whom', 'whose','whichever', 'whoever', 'whomever','anybody', 'anyone', 'anything', 'each', 'either', 'everybody', 'everyone','everything', 'neither', 'nobody', 'no one', 'nothing','one', 'somebody', 'someone', 'something','both', 'few', 'many','several','all', 'most', 'none', 'some','what','Hello']
-	black_list.sort()
-	
-	#if word==text[20]:
-		#print '1'
-		#return True
-	if word in black_list  :
-		#print '1'
-		return True	
-	else:
-	    return False
-				  
-			
-##print Black_list()	
+    root = Tkinter.Tk()
+    root.withdraw()
+
+    raw_input("Press enter to select the file")
+
+    filename = tkFileDialog.askopenfilename()
+    print filename
+    return filename
+
+
+def Black_list(word):  # string has to be passed
+    black_list = ['distribution', 'frequency', 'For', '.', ',', 'is', '>', '>>>', '(', ')', '<', 'of', 'in', 'we',
+                  'for', 'the', 'a', 'an', 'another', 'no', 'some', 'any', 'my', 'our', 'their', 'her', 'his', 'its',
+                  'each', 'every', 'certain', 'it', 'this', 'that', 'that', 'which', 'who', 'whom', 'whose',
+                  'whichever', 'whoever', 'whomever', 'anybody', 'anyone', 'anything', 'each', 'either', 'everybody',
+                  'everyone', 'everything', 'neither', 'nobody', 'no one', 'nothing', 'one', 'somebody', 'someone',
+                  'something', 'both', 'few', 'many', 'several', 'all', 'most', 'none', 'some', 'what', 'Hello']
+    black_list.sort()
+    if word in black_list:
+        # print '1'
+        return True
+    else:
+        return False
+
 
 def delete_words(text):
-	count=0
-	
-	for items in text:
-		
-		if not Black_list(items):
-			#print items
-			activelist.append(items)
-			count+=1
-			
-			
-		
-			
-		#count+=1
-		
+    count = 0
+
+    for items in text:
+
+        if not Black_list(items):
+            # print items
+            activelist.append(items)
+            count += 1
+
+
 def frequency(text):
-	freq=nltk.FreqDist(text)
-	keys=freq.keys()
-	print keys[:50]
-	
+    freq = nltk.FreqDist(text)
+    keys = freq.keys()
+    print keys[:50]
+
 
 def main():
-	f=Commondialog()
-	text=nltk.word_tokenize(convert_pdf_to_txt(f).lower())
-	delete_words(text)
-	#print activelist
-	#print text
-	frequency(activelist)
-	
-	
-	return 0
+    f = Commondialog()
+    text = nltk.word_tokenize(convert_pdf_to_txt(f).lower())
+    delete_words(text)
+    frequency(activelist)
+    return 0
+
 
 if __name__ == '__main__':
-	main()
-
+    main()
